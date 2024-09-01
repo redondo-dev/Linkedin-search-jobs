@@ -1,21 +1,20 @@
+/* eslint-disable no-undef */
 
 
 import { useState, useEffect } from "react";
 import axios from "axios";
+
 import "./App.css";
 
 function App() {
+
   const [jobs, setJobs] = useState([]);
-  const [accessToken, setAccessToken] = useState(null);
   const [searchJob, setSearchJob] = useState("");
 
   useEffect(() => {
-    const token = "f56eca63f6mshe7a786ba8e2eb2dp1f6f0ejsn51db271d413d";
-    setAccessToken(token);
-    if (accessToken) {
+    
       fetchJob();
-    }
-  }, [accessToken]);
+  }, []);
 
   const fetchJob = async (query = "golang") => {
     try {
@@ -29,7 +28,7 @@ function App() {
             sort: "mostRelevant",
           },
           headers: {
-            "x-rapidapi-key": accessToken, 
+            "x-rapidapi-key":process.env.REACT_APP_API_KEY,
             "x-rapidapi-host": "rapid-linkedin-jobs-api.p.rapidapi.com",
           },
         }
