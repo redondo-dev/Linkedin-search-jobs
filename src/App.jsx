@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from "react";
 import axios from "axios";
-
+import "./index.css"
 import "./App.css";
 
 function App() {
@@ -85,16 +85,18 @@ const parseDate = (dateString) => {
 
   return (
     <>
+    
       <h1>Job-Link-Search</h1>
-      <form onSubmit={handleSearch}>
-        <input
+      <img  src="https://www.alain-bensoussan.com/wp-content/uploads/2021/12/Man-with-futuristic-digital-tabletcRymden@AdobeStock_194849644-scaled.jpeg" alt="logo"  className="headerimage"/>
+      <form  className="search-form"onSubmit={handleSearch}>
+        <input className="search-input"
           type="search"
           name="search"
           placeholder="Cherchez votre job"
           value={searchJob}
           onChange={(e) => setSearchJob(e.target.value)}
         />
-        <button type="submit">Envoyer</button>
+        <button className="search-button"type="submit">Envoyer</button>
       </form> 
       <div className="job-cards-container">
     {/* {jobs.filter((job) => job.location && job.location.toLowerCase().includes("marseille, france")) */}
