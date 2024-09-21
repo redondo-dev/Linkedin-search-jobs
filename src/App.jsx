@@ -7,10 +7,13 @@ import "./App.css";
 function App() {
   const [jobs, setJobs] = useState([]);
   const [searchJob, setSearchJob] = useState("");
-
+  
   useEffect(() => {
-    fetchJob();
-  }, []);
+
+  if (searchJob.trim()) {
+    fetchJob(searchJob);
+  }
+}, [searchJob]); 
 
   const fetchJob = async (query = "React JS ") => {
     try {
