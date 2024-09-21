@@ -6,6 +6,7 @@ import "./App.css";
 function App() {
   const [jobs, setJobs] = useState([]);
   const [searchJob, setSearchJob] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     if (searchJob.trim()) {
@@ -17,7 +18,6 @@ function App() {
     try {
       const response = await axios.get(
         "https://rapid-linkedin-jobs-api.p.rapidapi.com/search-jobs",
-
         {
           params: {
             keywords: query,
@@ -32,11 +32,18 @@ function App() {
         }
       );
 
-      console.log("Response Data:", response.data);
-
-      setJobs(response.data.data || []);
+      if (
+        response.data.message &&
+        response.data.message.includes("you have exceeded the MONTHLY quota")
+      ) {
+        setErrorMessage("Vous avez dépassé le quota mensuel d'appels API.");
+      } else {
+        setJobs(response.data.data || []);
+        setErrorMessage("");
+      }
     } catch (error) {
       console.error("Error fetching jobs:", error.response || error.message);
+      setErrorMessage("Erreur lors de la récupération des offres d'emploi.");
     }
   };
 
@@ -46,6 +53,7 @@ function App() {
       fetchJob(searchJob);
     }
   };
+
   // Fonction pour convertir les dates relatives ("3 days ago") en date réelle
   const parseRelativeDate = (relativeDate) => {
     const now = new Date();
@@ -80,6 +88,11 @@ function App() {
     }
   };
 
+  // Fonction pour fermer la pop-up
+  const closePopup = () => {
+    setErrorMessage("");
+  };
+
   return (
     <>
       <h1>Job-Link-Search</h1>
@@ -101,8 +114,19 @@ function App() {
           Envoyer
         </button>
       </form>
+
+      {errorMessage && (
+        <div className="popup">
+          <div className="popup-content">
+            <span className="close" onClick={closePopup}>
+              &times;
+            </span>
+            <p>{errorMessage}</p>
+          </div>
+        </div>
+      )}
+
       <div className="job-cards-container">
-        {/* {jobs.filter((job) => job.location && job.location.toLowerCase().includes("marseille, france")) */}
         {jobs
           .sort((a, b) => {
             const dateA = parseDate(a.postDate);
@@ -110,7 +134,6 @@ function App() {
             if (!dateA || !dateB) return 0;
             return dateB - dateA;
           })
-          // new Date(b.postDate) - new Date(a.postDate)) // Trier par date de publication (du plus récent au plus ancien)
           .map((job) => (
             <div key={job.id} className="job-card">
               <h2 className="job-title">{job.title}</h2>
@@ -134,6 +157,7 @@ function App() {
 }
 
 export default App;
+
 // import { useState, useEffect } from "react";
 // import axios from "axios";
 // import "./index.css";
