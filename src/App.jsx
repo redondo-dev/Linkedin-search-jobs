@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import axios from "axios";
 import "./index.css";
@@ -7,13 +6,12 @@ import "./App.css";
 function App() {
   const [jobs, setJobs] = useState([]);
   const [searchJob, setSearchJob] = useState("");
-  
-  useEffect(() => {
 
-  if (searchJob.trim()) {
-    fetchJob(searchJob);
-  }
-}, [searchJob]); 
+  useEffect(() => {
+    if (searchJob.trim()) {
+      fetchJob(searchJob);
+    }
+  }, [searchJob]);
 
   const fetchJob = async (query = "React JS ") => {
     try {
@@ -28,7 +26,7 @@ function App() {
             sort: "mostRelevant",
           },
           headers: {
-           "x-rapidapi-key": import.meta.env.VITE_API_KEY,
+            "x-rapidapi-key": import.meta.env.VITE_API_KEY,
             "x-rapidapi-host": "rapid-linkedin-jobs-api.p.rapidapi.com",
           },
         }
@@ -113,8 +111,8 @@ function App() {
             return dateB - dateA;
           })
           // new Date(b.postDate) - new Date(a.postDate)) // Trier par date de publication (du plus récent au plus ancien)
-          .map((job, index) => (
-            <div key={index} className="job-card">
+          .map((job) => (
+            <div key={job.id} className="job-card">
               <h2 className="job-title">{job.title}</h2>
               <p className="company-name">Company: {job.company.name}</p>
               <p className="job-location">Location: {job.location}</p>
